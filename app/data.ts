@@ -1,0 +1,67 @@
+import type { ObjectKind } from "./types";
+
+export const objectLibrary: Record<ObjectKind, { meaning: string; grounded: string }> = {
+  candle: { meaning: "focus, devotion, intention, transformation", grounded: "lighting a candle can become a learned cue that a focused moment is beginning" },
+  "incense holder": { meaning: "clearing, offering, transition", grounded: "scent and visible smoke can mark a transition and give attention a slow-moving anchor" },
+  crystal: { meaning: "clarity, steadiness, beauty", grounded: "holding or viewing an object can support tactile or visual grounding" },
+  "dried lavender": { meaning: "calm, cleansing, rest", grounded: "scent and repeated ritual associations can become sensory anchors for relaxation" },
+  "herb jar": { meaning: "care, preservation, practical knowledge", grounded: "collections can make routines visible and help us remember what supports us" },
+  "moon water": { meaning: "reflection, receptivity, cycles", grounded: "a bowl of water offers a quiet visual focus and a reminder to pause" },
+  "tarot deck": { meaning: "archetype, chance, perspective", grounded: "a random image can interrupt habitual thinking and open a reflective question" },
+  grimoire: { meaning: "memory, study, self-witnessing", grounded: "writing reduces working-memory load and leaves a trace of changing thought" },
+  "framed image": { meaning: "remembrance, devotion, identity", grounded: "chosen images can cue values, memories, or relationships we want to keep present" },
+  "silver key": { meaning: "access, threshold, hidden knowledge", grounded: "symbolic objects can externalize goals, transitions, and decisions" },
+  "gothic mirror": { meaning: "self-knowledge, perception, truth", grounded: "a mirror can invite a deliberate pause between feeling and interpretation" },
+  "wax seal": { meaning: "commitment, privacy, completion", grounded: "closing or sealing a page creates a physical-feeling end point" },
+  "constellation charm": { meaning: "orientation, kinship, vastness", grounded: "sky maps place personal time inside larger natural cycles" },
+  "potion bottle": { meaning: "change, mixture, possibility", grounded: "a vessel can represent the small practices we combine to shift a day" },
+  "flower stem": { meaning: "tenderness, impermanence, growth", grounded: "natural forms can soften visual attention and remind us that change is ordinary" },
+  "bunny charm": { meaning: "softness, intuition, alertness, renewal", grounded: "a repeated personal symbol can become an anchor or signature cue" },
+};
+
+export const tarotCards = [
+  ["the fool", "a traveler pauses at a silver threshold under a fine crescent", "beginnings, openness, trust", "where could curiosity be more useful than certainty?", "acting without attending to consequence", "where does your body feel open or guarded?", "what beginning asks for a small, honest step?", "prepare one thing that makes starting easier"],
+  ["the magician", "four tools orbit a steady hand above a dark worktable", "agency, skill, resourcefulness", "what is already within reach?", "performance without substance", "notice your hands; are they tense or ready?", "which available resource have you overlooked?", "use one tool you already have"],
+  ["the high priestess", "a veiled figure sits between black water and a pale moon", "intuition, mystery, inner knowing", "what becomes audible when you stop forcing an answer?", "withholding or confusing fear with intuition", "what quiet signal is present beneath the noise?", "what do you know but hesitate to name?", "take five minutes without input"],
+  ["the empress", "a crowned figure tends night-blooming flowers in a walled garden", "nurture, creativity, abundance", "what needs steady care rather than pressure?", "overgiving or comfort that becomes stagnation", "where could your body receive support?", "what are you trying to grow, and what feeds it?", "offer care to one living thing"],
+  ["the emperor", "a stone chair stands beneath a disciplined red sky", "structure, authority, stability", "what boundary would make your life more workable?", "rigidity, control, domination", "where are you bracing to stay in control?", "which structure protects you, and which confines you?", "define one clear boundary"],
+  ["the hierophant", "an archivist holds a key beside a ladder of old texts", "tradition, teaching, shared practice", "which inherited practice still has meaning for you?", "obedience without examination", "how does your body respond to rules?", "what tradition will you keep, revise, or release?", "research the origin of one practice"],
+  ["the lovers", "two mirrored figures choose a path beneath a joined constellation", "choice, intimacy, alignment", "are your choices aligned with what you say you value?", "self-abandonment or avoiding choice", "what feels like a yes, a no, or uncertainty?", "what does reciprocity mean here?", "name the value beneath your choice"],
+  ["the chariot", "a midnight carriage is drawn by opposing silver forms", "direction, will, momentum", "what deserves coordinated effort?", "force, haste, divided motives", "can you soften without losing direction?", "what would focused movement look like?", "remove one competing demand"],
+  ["strength", "a calm figure rests a hand beside a watchful shadow-cat", "courage, patience, gentle power", "where might gentleness be the stronger response?", "suppression disguised as composure", "where can you release ten percent of your tension?", "what are you learning to meet without force?", "choose the kindest brave action"],
+  ["the hermit", "a lone lantern illuminates one stair in a vast archive", "solitude, inquiry, guidance", "what requires quiet investigation?", "isolation or endless searching", "does solitude feel restorative or protective?", "what question deserves your undivided attention?", "make a short appointment with silence"],
+  ["wheel of fortune", "a celestial mechanism turns through seasons and weather", "cycles, change, contingency", "what is changing that you cannot fully control?", "fatalism or chasing luck", "what helps you stay flexible during change?", "which part of this cycle is yours to influence?", "adapt one expectation"],
+  ["justice", "a silver scale balances a feather and a small iron key", "truth, consequence, fairness", "what becomes clear when you include consequence?", "harsh judgment or false equivalence", "where do you feel the pull of an unresolved choice?", "what repair would be proportionate and real?", "write the facts without interpretation"],
+  ["the hanged one", "a figure rests upside-down among softly lit roots", "pause, surrender, perspective", "what might a voluntary pause reveal?", "martyrdom or indefinite delay", "what happens when you stop pushing for a moment?", "which assumption could you turn around?", "delay one non-urgent reaction"],
+  ["death", "a pale moth rises from a field of discarded armor", "ending, transition, renewal", "what has ended even if you have not acknowledged it?", "clinging or forcing transformation", "where do you feel the effort of holding on?", "what ending needs a respectful name?", "clear one remnant of a finished chapter"],
+  ["temperance", "two dark vessels pour one bright stream between them", "balance, integration, moderation", "what can be combined rather than polarized?", "avoidance through endless moderation", "where could you find a steadier rhythm?", "what would enough look like today?", "reduce one extreme by a small amount"],
+  ["the devil", "golden threads bind willing hands to a glittering machine", "attachment, appetite, constraint", "what bargain keeps repeating because it offers short-term relief?", "shame or denial of desire", "where do you feel compulsion in the body?", "what has power because you cannot name it?", "add a pause before one automatic habit"],
+  ["the tower", "lightning opens a dark tower while its windows become stars", "disruption, collapse, sudden clarity", "what structure no longer supports you?", "resisting change until it becomes louder", "where do you feel bracing, tension, or resistance?", "what truth have you avoided because it requires change?", "name one thing that needs repair, release, or redesign"],
+  ["the star", "a figure pours water beneath a precise field of stars", "hope, renewal, orientation", "what still offers a quiet point of orientation?", "hope used to bypass grief", "what lets your breath become a little easier?", "which hope can coexist with reality?", "make one modest vote for the future"],
+  ["the moon", "a moonlit path passes between two towers into moving water", "uncertainty, dream, projection", "what is unclear, and what are you adding to the unknown?", "confusion, projection, avoidance", "what changes when you name uncertainty plainly?", "which fear is fact, and which is forecast?", "wait for one more piece of information"],
+  ["the sun", "a bright disk warms a garden of open silver flowers", "vitality, clarity, joy", "what is uncomplicatedly life-giving?", "forced positivity or overexposure", "where do you notice warmth or ease?", "what are you allowed to enjoy without earning it?", "spend ten minutes with something enlivening"],
+  ["judgement", "sleeping figures wake as a bell crosses the dawn", "reckoning, awakening, renewal", "what are you ready to answer differently?", "self-condemnation or seeking absolution", "what part of you is asking to be heard?", "what would accountability without shame look like?", "make one honest repair"],
+  ["the world", "a dancer holds a ring of branches around a small blue planet", "completion, integration, belonging", "what can be honored as complete?", "perfectionism that delays closure", "can your body register that something is done?", "what did this chapter teach you to carry forward?", "mark the ending in a tangible way"],
+].map(([name, visual, themes, meaning, shadow, body, journal, action]) => ({ name, visual, themes, meaning, shadow, body, journal, action }));
+
+export const celestialBodies = [
+  ["moon", "earth’s natural satellite, reflecting sunlight as it orbits us", "cycles, change, night, memory", "what is changing slowly enough to notice?"],
+  ["sun", "the star whose light and gravity sustain our planetary system", "vitality, identity, illumination", "what helps you feel vividly present?"],
+  ["venus", "a rocky planet with thick clouds and visible phases from earth", "beauty, attraction, pleasure, value", "what do you value, and are your choices aligned with it?"],
+  ["mars", "a cold, iron-rich rocky planet with ancient volcanoes and valleys", "drive, conflict, courage, desire", "where does your energy need a clear direction?"],
+  ["mercury", "the smallest planet and fastest to orbit the sun", "language, exchange, movement, wit", "what wants to be said more plainly?"],
+  ["orion", "a prominent constellation containing massive young stars and stellar nurseries", "the hunter, pursuit, winter orientation", "what are you pursuing, and what is the cost?"],
+  ["pleiades", "a nearby open cluster of hot young stars in taurus", "kinship, navigation, seasonal change", "where do you find belonging without sameness?"],
+  ["ursa major", "a northern constellation whose stars include the big dipper asterism", "guidance, guardianship, the great bear", "what reliably helps you find your bearings?"],
+  ["cassiopeia", "a w-shaped northern constellation opposite the big dipper", "the enthroned queen, vanity, consequence", "where might image be competing with substance?"],
+].map(([name, science, symbolism, prompt]) => ({ name, science, symbolism, prompt }));
+
+export const rituals = [
+  ["focus ritual", "candle", "feel both feet and name one visible edge", "inhale gently, exhale a little longer", "for the next moment, i am returning to…", "one thing at a time is still movement"],
+  ["soft reset ritual", "moon water", "wash your hands or touch cool glass", "three unforced breaths", "the next kind thing is…", "the moment can begin again"],
+  ["anxious body ritual", "crystal", "name the room and touch one steady object", "slow the exhale without forcing depth", "right now, i notice…", "i can meet this minute, then the next"],
+  ["adhd overwhelm ritual", "silver key", "reduce the visual field to one object", "breathe normally and unclench your jaw", "the smallest visible step is…", "small and done is useful"],
+  ["low energy ritual", "flower stem", "notice one color, texture, and sound", "let the breath be easy", "today’s enough might be…", "care counts even when it is quiet"],
+  ["full moon reflection", "gothic mirror", "dim one light and notice what remains visible", "pause after each exhale", "what has become easier to see?", "visibility is information, not a verdict"],
+  ["new moon intention", "wax seal", "hold a dark or smooth object", "take one slow settling breath", "i want to make room for…", "begin without demanding certainty"],
+].map(([name, object, sensory, breath, journal, closing]) => ({ name, object, sensory, breath, journal, closing }));
