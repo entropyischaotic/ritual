@@ -50,16 +50,5 @@ the complete altar and grimoire state is stored under `ritual-state-v1` in the c
 
 to start completely fresh, remove the `ritual-state-v1` key from browser storage.
 
-## later
-
-- supabase auth
-- cloud-saved altars
-- custom uploaded altar images
-- shareable altar screenshots
-- more altar object packs
-- expanded moon calculations
-- expanded constellation library
-- optional ai reflection assistant, framed as journaling support only
-- paid cosmetic themes, not paid spiritual claims
 
 created by isa 🐇
