@@ -16,28 +16,38 @@ const sections: { id: Section; icon: typeof Moon }[] = [
   { id: "inner apothecary", icon: Heart }, { id: "nervous system alchemy", icon: Moon }, { id: "grimoire", icon: BookOpen },
 ];
 
+type TarotCard = (typeof tarotCards)[number];
+type TarotMode = "one" | "three";
+
+const spreadPrompts = [
+  { label: "first card", prompt: "what is asking for honest attention?" },
+  { label: "second card", prompt: "what pattern, pressure, or support is shaping this?" },
+  { label: "third card", prompt: "what small grounded step could meet the moment?" },
+] as const;
+
 const symbolicModules = [
-  ["why humans see patterns", "pattern detection helps us learn, predict, and orient. it can reveal useful structure, and it can also connect unrelated events. reflection benefits from holding both possibilities."],
-  ["symbols as emotional language", "a symbol can compress memory, feeling, and value into one image. its meaning is made through culture and personal association, not hidden laboratory force."],
-  ["myth as memory", "stories carry values and warnings across time. myth can preserve lived knowledge while remaining story rather than literal record."],
-  ["astrology as archetype, not proof", "astrology is a historical and cultural interpretation system. it can offer a vocabulary for reflection, but evidence does not support it as a predictor of personality or fate."],
-  ["tarot as a mirror, not a command", "chance images prompt associations that habitual thought may miss. the reader makes meaning; the card does not issue instructions or guarantee an outcome."],
-  ["ritual objects as meaning containers", "repeated use lets an ordinary object gather memories and cues. its effect can live in attention, association, beauty, and behavior."],
-  ["why beauty can support attention", "carefully shaped surroundings can invite approach, slow visual scanning, and make a chosen practice easier to return to."],
+  ["why humans see patterns", "pattern detection helps us learn, predict, and orient. it can reveal real structure, and it can also connect unrelated events. symbolic practice works best when wonder and skepticism sit at the same table."],
+  ["symbols as emotional language", "a symbol can hold memory, feeling, culture, desire, grief, and value in one small image. it does not need hidden force to move us; association is already powerful."],
+  ["myth as memory", "myths organize shared fears, seasons, thresholds, kinship, and consequence. they can preserve human knowledge while remaining story, not measurement."],
+  ["archetypes as reusable shapes", "an archetype is a pattern humans keep recognizing: the threshold, the teacher, the exile, the return. it is a reflective lens, not a universal law."],
+  ["astrology as archetype, not proof", "astrology is a historical and cultural interpretation system. it can offer poetic vocabulary, but evidence does not support it as a predictor of personality, fate, relationships, or outcomes."],
+  ["tarot as a mirror, not a command", "chance images can interrupt habitual thought and invite new questions. the reader makes meaning; the card does not issue instructions or guarantee a future."],
+  ["ritual objects as meaning containers", "repeated use lets an ordinary object gather memories, cues, and values. its effect can live in attention, association, beauty, and behavior."],
+  ["why beauty can support attention", "dark velvet, pale paper, silver edges, and quiet order can make attention feel invited rather than forced. beauty can become an interface for care."],
   ["take what resonates", "resonance is an invitation to examine, not proof that a claim is true. keep what supports honest reflection; leave what distorts, pressures, or diminishes you."],
 ];
 
 const physicsModules = [
-  ["attention and intention", "naming a focus narrows the field of possible action. intention is direction, not a guarantee."],
-  ["repetition and habit cues", "a repeated opening gesture can make a behavior easier to begin by linking context with action."],
-  ["sensory anchors", "texture, scent, sound, and light give wandering attention something immediate to notice."],
-  ["environment design", "placing useful cues in view and reducing competing signals changes what is easiest to do."],
-  ["breath and rhythm", "a gentle, unforced rhythm can support settling. comfort matters more than performing a perfect breath."],
-  ["embodied action", "movement makes an abstract choice tangible: opening a book, lighting a digital candle, putting an object down."],
-  ["memory and association", "contexts gather meaning through repetition. returning to the same cue can help recall the state or practice paired with it."],
-  ["symbolic objects and focus", "an object can hold a question in view and reduce the effort of remembering what matters."],
-  ["journaling and cognitive offloading", "writing moves thoughts out of working memory so they can be sorted, questioned, or left for later."],
-  ["closing rituals", "a clear ending can help the body and attention shift between roles, spaces, and demands."],
+  ["attention and intention", "naming a focus narrows the field of possible action. intention is direction, not a guarantee, and its power is partly that it makes the next choice easier to see."],
+  ["repetition and habit cues", "a repeated opening gesture links context with action. over time, the candle, notebook, or breath cue can become a softer way to begin."],
+  ["sensory anchors", "texture, scent, sound, temperature, and low light give wandering attention something immediate to notice. a sensory cue can interrupt abstract spiraling."],
+  ["environment design", "what is visible becomes easier to remember. an altar changes the room by placing useful cues in reach and lowering the friction of returning."],
+  ["breath and rhythm", "breath can influence arousal through rhythm, comfort, and attention. the goal is not a perfect technique; it is a pace the body can tolerate."],
+  ["embodied action", "movement makes an abstract choice tangible: opening a book, moving a charm, lighting a digital candle, closing a page. the body helps mark the transition."],
+  ["memory and association", "contexts gather meaning through repetition. returning to the same cue can help recall the state, question, or practice paired with it."],
+  ["symbolic objects and focus", "an object can hold a question in view and reduce the effort of remembering what matters. it externalizes attention without claiming supernatural causation."],
+  ["journaling and cognitive offloading", "writing moves thoughts out of working memory so they can be sorted, questioned, or left for later. a page can hold what the mind keeps rehearsing."],
+  ["closing rituals", "a clear ending can help attention shift between roles, spaces, and demands. completion matters because nervous systems like edges."],
 ];
 
 const nervousModules = [
@@ -65,9 +75,15 @@ export function RitualApp() {
   const [selected, setSelected] = useState<PlacedObject | null>(null);
   const [intentionFor, setIntentionFor] = useState<PlacedObject | null>(null);
   const [tarotOpen, setTarotOpen] = useState(false);
-  const [drawn, setDrawn] = useState<(typeof tarotCards)[number] | null>(null);
+  const [tarotMode, setTarotMode] = useState<TarotMode>("one");
+  const [drawn, setDrawn] = useState<TarotCard[]>([]);
   const [confirmReset, setConfirmReset] = useState(false);
   const navigate = (next: Section) => { setSection(next); setMenu(false); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const openTarot = (mode: TarotMode = "one") => { setTarotMode(mode); setDrawn([]); setTarotOpen(true); };
+  const drawTarot = () => {
+    const count = tarotMode === "three" ? 3 : 1;
+    setDrawn([...tarotCards].sort(() => crypto.getRandomValues(new Uint32Array(1))[0] - 2 ** 31).slice(0, count));
+  };
 
   return <div className="app-shell">
     <StarField />
@@ -78,7 +94,7 @@ export function RitualApp() {
       <p className="eyebrow">a quiet instrument</p>
       <nav>{sections.map(({ id, icon: Icon }) => <button key={id} className={section === id ? "active" : ""} onClick={() => navigate(id)}><Icon size={15}/><span>{id}</span></button>)}</nav>
       <div className="sidebar-note"><span className="status-dot"/>stored on this device</div>
-      <div className="creator">created by isa 🐇</div>
+      <div className="creator">created by isa 🐰</div>
     </aside>
     {menu && <button className="menu-scrim" onClick={() => setMenu(false)} aria-label="close menu"/>}
     <main>
@@ -88,20 +104,21 @@ export function RitualApp() {
         <div className="moon-chip"><span className="moon-mini"/>{moon.name}<small>{moon.illumination}% lit</small></div>
       </header>
       <AnimatePresence mode="wait"><motion.div key={section} className="page" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} transition={{ duration: .25 }}>
-        {section === "altar" && <Altar store={store} moonPhase={moon.name} onSelect={setSelected} onIntention={setIntentionFor} onTarot={() => setTarotOpen(true)} onReset={() => setConfirmReset(true)}/>} 
+        {section === "altar" && <Altar store={store} moonPhase={moon.name} onSelect={setSelected} onIntention={setIntentionFor} onTarot={() => openTarot("one")} onReset={() => setConfirmReset(true)}/>} 
         {section === "cosmo lab" && <CosmoLab moon={moon} addEntry={store.addEntry}/>} 
-        {section === "tarot" && <TarotSection onDraw={() => setTarotOpen(true)}/>} 
+        {section === "tarot" && <TarotSection onDraw={() => openTarot("one")} onThree={() => openTarot("three")}/>} 
         {section === "symbolic science" && <ModuleSection eyebrow="pattern cabinet / 01" title="symbolic science" intro="humans live in physical worlds and symbolic ones. this cabinet studies the difference without flattening either." modules={symbolicModules}/>} 
         {section === "ritual physics" && <ModuleSection eyebrow="practice cabinet / 02" title="ritual physics" intro="a ritual does not need to break the laws of physics to work. sometimes it works because it gives your attention somewhere to land." modules={physicsModules}/>} 
         {section === "inner apothecary" && <Apothecary favorites={store.state.favorites} entries={store.state.entries} addEntry={store.addEntry} moonPhase={moon.name}/>} 
         {section === "nervous system alchemy" && <NervousSystem/>} 
         {section === "grimoire" && <Grimoire entries={store.state.entries} addEntry={store.addEntry} updateEntry={store.updateEntry} deleteEntry={store.deleteEntry} moonPhase={moon.name}/>} 
       </motion.div></AnimatePresence>
-      <footer><span>ritual is a reflection and grounding tool, not therapy, diagnosis, medical care, or crisis support.</span><span>created by isa 🐇</span></footer>
+      <footer><span>ritual is a reflection and grounding tool, not therapy, diagnosis, medical care, or crisis support.</span><span>created by isa 🐰</span></footer>
+      <nav className="bottom-nav" aria-label="mobile sections">{sections.map(({ id, icon: Icon }) => <button key={id} className={section === id ? "active" : ""} onClick={() => navigate(id)}><Icon size={15}/><span>{id}</span></button>)}</nav>
     </main>
     <ObjectDetail object={selected} close={() => setSelected(null)} note={(note) => { if (selected) store.updateObject(selected.id, { note }); }} remove={() => { if (selected) store.removeObject(selected.id); setSelected(null); }} favorite={(kind) => { if (!store.state.favorites.includes(kind)) store.addEntry(newEntry("favorite object", kind, objectLibrary[kind].grounded, moon.name)); store.toggleFavorite(kind); }} isFavorite={selected ? store.state.favorites.includes(selected.kind) : false}/>
     <IntentionModal object={intentionFor} close={() => setIntentionFor(null)} save={(body, mood) => { if (!intentionFor) return; store.updateObject(intentionFor.id, { active: true }); store.addEntry(newEntry("intention", `${intentionFor.kind} intention`, body, moon.name, mood)); setIntentionFor(null); }}/>
-    <TarotModal open={tarotOpen} close={() => { setTarotOpen(false); setDrawn(null); }} card={drawn} draw={() => setDrawn(tarotCards[Math.floor(Math.random() * tarotCards.length)])} save={(note) => { if (!drawn) return; store.addEntry(newEntry("tarot", drawn.name, `${drawn.meaning}\n\n${note}`.trim(), moon.name, undefined, drawn.themes)); setTarotOpen(false); setDrawn(null); }}/>
+    <TarotModal open={tarotOpen} mode={tarotMode} close={() => { setTarotOpen(false); setDrawn([]); }} cards={drawn} draw={drawTarot} save={(note) => { if (!drawn.length) return; const body = drawn.map((card, index) => `${tarotMode === "three" ? `${spreadPrompts[index].label}: ` : ""}${card.name}\n${card.meaning}\nbody check: ${card.body}\njournal: ${tarotMode === "three" ? spreadPrompts[index].prompt : card.journal}`).join("\n\n"); store.addEntry(newEntry("tarot", tarotMode === "three" ? "three-card reflection" : drawn[0].name, `${body}\n\n${note}`.trim(), moon.name, undefined, "take what resonates, leave what doesn’t. this card is a mirror, not a command.")); setTarotOpen(false); setDrawn([]); }}/>
     <Modal open={confirmReset} onClose={() => setConfirmReset(false)}><span className="eyebrow">clear the table</span><h2>reset your altar?</h2><p className="muted">this returns the altar to its starting arrangement. your grimoire stays untouched.</p><div className="modal-actions"><button className="text-button" onClick={() => setConfirmReset(false)}>keep it</button><button className="primary-button danger" onClick={() => { store.resetAltar(); setConfirmReset(false); }}>reset altar</button></div></Modal>
   </div>;
 }
@@ -140,9 +157,10 @@ function Altar({ store, onSelect, onIntention, onTarot, onReset }: { store: Retu
 
 function ObjectDetail({ object, close, note, remove, favorite, isFavorite }: { object: PlacedObject | null; close: () => void; note: (n: string) => void; remove: () => void; favorite: (kind: ObjectKind) => void; isFavorite: boolean }) {
   const [draft, setDraft] = useState("");
+  useEffect(() => setDraft(object?.note ?? ""), [object]);
   if (!object) return <Modal open={false} onClose={close}>{null}</Modal>;
   const data = objectLibrary[object.kind];
-  return <Modal open onClose={close}><div className="detail-hero"><ObjectArt kind={object.kind}/><div><span className="eyebrow">altar object</span><h2>{object.kind}</h2></div></div><Detail label="symbolic meaning">{data.meaning}.</Detail><Detail label="grounded interpretation">{data.grounded}.</Detail><label className="field-label">your note<textarea defaultValue={object.note} onChange={(e) => setDraft(e.target.value)} placeholder="what does this hold for you?"/></label><div className="modal-actions split"><button className="icon-text danger-text" onClick={remove}><Trash2 size={14}/>remove</button><div><button className="text-button" onClick={() => favorite(object.kind)}>{isFavorite ? "unfavorite" : "favorite"}</button><button className="primary-button" onClick={() => { note(draft); close(); }}>save note</button></div></div></Modal>;
+  return <Modal open onClose={close}><div className="detail-hero"><ObjectArt kind={object.kind}/><div><span className="eyebrow">altar object</span><h2>{object.kind}</h2></div></div><Detail label="symbolic meaning">{data.meaning}.</Detail><Detail label="grounded interpretation">{data.grounded}.</Detail><label className="field-label">your note<textarea value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="what does this hold for you?"/></label><div className="modal-actions split"><button className="icon-text danger-text" onClick={remove}><Trash2 size={14}/>remove</button><div><button className="text-button" onClick={() => favorite(object.kind)}>{isFavorite ? "unfavorite" : "favorite"}</button><button className="primary-button" onClick={() => { note(draft); close(); }}>save note</button></div></div></Modal>;
 }
 
 function IntentionModal({ object, close, save }: { object: PlacedObject | null; close: () => void; save: (body: string, mood: string) => void }) {
@@ -150,26 +168,34 @@ function IntentionModal({ object, close, save }: { object: PlacedObject | null; 
   return <Modal open={!!object} onClose={close}><span className="eyebrow">attention ritual</span><h2>set an intention</h2><p className="lead-small">what are you calling your attention back to?</p><textarea className="large-input" value={body} onChange={(e) => setBody(e.target.value)} placeholder="write one clear sentence…" autoFocus/><label className="field-label">mood tag <input value={mood} onChange={(e) => setMood(e.target.value)} placeholder="optional"/></label><div className="safety-note"><Info size={14}/><span>digital ritual only. if using real candles, never leave flames unattended.</span></div><p className="microcopy">the glow marks a beginning; it does not cause an outcome.</p><div className="modal-actions"><button className="text-button" onClick={close}>not now</button><button className="primary-button" disabled={!body.trim()} onClick={() => { save(body.trim(), mood.trim()); setBody(""); setMood(""); }}>light & save</button></div></Modal>;
 }
 
-function TarotModal({ open, close, card, draw, save }: { open: boolean; close: () => void; card: (typeof tarotCards)[number] | null; draw: () => void; save: (note: string) => void }) {
+function TarotModal({ open, close, mode, cards, draw, save }: { open: boolean; close: () => void; mode: TarotMode; cards: TarotCard[]; draw: () => void; save: (note: string) => void }) {
   const [note, setNote] = useState("");
-  return <Modal open={open} onClose={close} wide><span className="eyebrow">one-card reflection</span><h2>{card ? card.name : "draw a card"}</h2><p className="muted">take what resonates, leave what doesn’t. this card is a mirror, not a command.</p>{!card ? <div className="draw-stage"><button className="tarot-card-back" onClick={draw}><span className="card-orbit"/><Moon size={36}/><small>touch to draw</small></button></div> : <div className="tarot-reading"><div className="drawn-card"><div className="card-stars">✦ · ✧ · ✦</div><Moon size={46}/><span>{card.name}</span><small>{card.visual}</small></div><div className="reading-copy"><Detail label="traditional themes">{card.themes}</Detail><Detail label="reflective meaning">{card.meaning}</Detail><Detail label="shadow side">{card.shadow}</Detail><Detail label="body check">{card.body}</Detail><Detail label="journal question">{card.journal}</Detail><Detail label="small action">{card.action}</Detail><textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="leave a note with this pull…"/><div className="modal-actions"><button className="text-button" onClick={draw}>draw again</button><button className="primary-button" onClick={() => { save(note); setNote(""); }}>save to grimoire</button></div></div></div>}</Modal>;
+  return <Modal open={open} onClose={close} wide><span className="eyebrow">{mode === "three" ? "three-card reflection" : "one-card reflection"}</span><h2>{cards.length ? mode === "three" ? "three mirrors" : cards[0].name : "draw a card"}</h2><p className="muted">take what resonates, leave what doesn’t. this card is a mirror, not a command.</p>{!cards.length ? <div className="draw-stage"><button className="tarot-card-back" onClick={draw}><span className="card-orbit"/><Moon size={36}/><small>{mode === "three" ? "draw three cards" : "touch to draw"}</small></button></div> : <div className={mode === "three" ? "tarot-reading spread" : "tarot-reading"}><div className={mode === "three" ? "spread-cards" : "drawn-card-wrap"}>{cards.map((card, index) => <div className="drawn-card" key={`${card.name}-${index}`}><div className="card-stars">✦ · ✧ · ✦</div><Moon size={42}/><span>{card.name}</span>{mode === "three" && <em>{spreadPrompts[index].label}</em>}<small>{card.visual}</small></div>)}</div><div className="reading-copy">{cards.map((card, index) => <div className="reading-panel" key={card.name}><span className="eyebrow">{mode === "three" ? spreadPrompts[index].prompt : "card notes"}</span><Detail label="traditional themes">{card.themes}</Detail><Detail label="reflective meaning">{card.meaning}</Detail><Detail label="shadow side">{card.shadow}</Detail><Detail label="body check">{card.body}</Detail><Detail label="journal question">{mode === "three" ? spreadPrompts[index].prompt : card.journal}</Detail><Detail label="small action">{card.action}</Detail></div>)}<textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="leave a note with this pull…"/><div className="modal-actions"><button className="text-button" onClick={draw}>draw again</button><button className="primary-button" onClick={() => { save(note); setNote(""); }}>save to grimoire</button></div></div></div>}</Modal>;
 }
 
 function Detail({ label, children }: { label: string; children: React.ReactNode }) { return <div className="detail-row"><span>{label}</span><p>{children}</p></div>; }
 
+function seasonalDistanceText(days?: number) {
+  if (days === undefined) return "";
+  if (days === 0) return "today";
+  if (days === 1) return "tomorrow";
+  if (days === -1) return "yesterday";
+  return days > 0 ? `in ${days} days` : `${Math.abs(days)} days ago`;
+}
+
 function CosmoLab({ moon, addEntry }: { moon: ReturnType<typeof getMoonData>; addEntry: (e: GrimoireEntry) => void }) {
   const [reflection, setReflection] = useState("");
   return <><PageIntro eyebrow="observatory / 01" title="cosmo lab">astronomy describes celestial bodies and their motion. symbolic systems tell human stories about them. both can be studied without mistaking one for the other.</PageIntro>
-    <section className="moon-dashboard"><div className="moon-visual"><div className="moon-disc" style={{ "--phase": `${moon.age / 29.53 * 360}deg` } as React.CSSProperties}/><span>approximate view</span></div><div className="moon-report"><span className="eyebrow">now above us</span><h2>{moon.name}</h2><div className="moon-stats"><div><strong>{moon.illumination}%</strong><span>illumination</span></div><div><strong>{moon.direction}</strong><span>light trend</span></div><div><strong>{moon.age.toFixed(1)}</strong><span>days into cycle</span></div></div><p>{moon.prompt}</p><div className="inline-journal"><input value={reflection} onChange={(e) => setReflection(e.target.value)} placeholder="leave a moon reflection…"/><button disabled={!reflection.trim()} onClick={() => { addEntry(newEntry("moon reflection", moon.name, reflection, moon.name)); setReflection(""); }}>save</button></div></div></section>
-    <div className="science-grid"><ScienceCard index="01" title="why phases happen">half the moon is always lit by the sun. as the moon orbits earth, our viewing angle reveals a changing portion of that sunlit half.</ScienceCard><ScienceCard index="02" title="sun · earth · moon">new moon places the moon roughly sunward; full moon places earth roughly between sun and moon. the orbit is tilted, which is why eclipses are uncommon.</ScienceCard><ScienceCard index="03" title="tides & gravity">the moon’s gravity and the sun’s gravity create tidal patterns in earth’s oceans. local coastlines, depth, and weather shape the tides we observe.</ScienceCard><ScienceCard index="04" title="light, sleep & darkness">light exposure can influence circadian timing. moonlight is far dimmer than daylight, and evidence for consistent lunar effects on human sleep remains mixed.</ScienceCard></div>
-    <section className="grounded-banner"><Moon/><div><span className="eyebrow">lunar language</span><h3>what people may mean by “lunar energy”</h3><p>visible light cycles, gravity and tides, agricultural calendars, cultural history, darkness and sleep cues, ritual timing, or personal meaning-making. it does not establish control over emotion, fate, or personality.</p></div></section>
+    <section className="moon-dashboard"><div className="moon-visual"><div className="moon-disc" style={{ "--phase": `${moon.age / 29.53 * 360}deg` } as React.CSSProperties}/><span>approximate view</span></div><div className="moon-report"><span className="eyebrow">now above us</span><h2>{moon.name}</h2><div className="moon-stats"><div><strong>{moon.illumination}%</strong><span>illumination</span></div><div><strong>{moon.direction}</strong><span>light trend</span></div><div><strong>{moon.age.toFixed(1)}</strong><span>days into cycle</span></div></div>{moon.seasonalName && <div className="seasonal-note"><span>{seasonalDistanceText(moon.seasonalDistanceDays)}</span><strong>{moon.seasonalName}</strong><p>{moon.seasonalNote}</p></div>}<p>{moon.prompt}</p><div className="inline-journal"><input value={reflection} onChange={(e) => setReflection(e.target.value)} placeholder="leave a moon reflection…"/><button disabled={!reflection.trim()} onClick={() => { addEntry(newEntry("moon reflection", moon.name, reflection, moon.name)); setReflection(""); }}>save</button></div></div></section>
+    <div className="science-grid"><ScienceCard index="01" title="phase physics">{moon.phasePhysics}</ScienceCard><ScienceCard index="02" title="sun · earth · moon">{moon.geometry}</ScienceCard><ScienceCard index="03" title="waxing and waning">{moon.waxingWaning}</ScienceCard><ScienceCard index="04" title="illumination">illumination is the approximate percent of the visible lunar disk lit from earth. it is geometry, not a measure of spiritual force.</ScienceCard><ScienceCard index="05" title="tides and gravity">{moon.tides}</ScienceCard><ScienceCard index="06" title="eclipses">{moon.eclipses}</ScienceCard><ScienceCard index="07" title="moonlight and sleep">{moon.moonlight}</ScienceCard><ScienceCard index="08" title="ritual timing">people use lunar timing because visible cycles are memorable. the rhythm can support reflection without claiming the moon controls inner life.</ScienceCard></div>
+    <section className="grounded-banner"><Moon/><div><span className="eyebrow">lunar language</span><h3>what people may mean by “lunar energy”</h3><p>{moon.meaning}</p></div></section>
     <Cabinet title="celestial library" subtitle="physical objects · inherited stories · present questions">{celestialBodies.map((body, i) => <article className="celestial-card" key={body.name}><div className="constellation-graphic"><span>{i % 2 ? "·  ✦      ·" : "✧    ·   ✦"}</span><i/><i/><i/></div><span className="eyebrow">catalogue {String(i + 1).padStart(2, "0")}</span><h3>{body.name}</h3><Detail label="astronomy">{body.science}.</Detail><Detail label="symbolism">{body.symbolism}.</Detail><p className="prompt">“{body.prompt}”</p></article>)}</Cabinet>
   </>;
 }
 
 function ScienceCard({ index, title, children }: { index: string; title: string; children: React.ReactNode }) { return <article className="science-card"><span>{index}</span><Moon size={17}/><h3>{title}</h3><p>{children}</p></article>; }
 
-function TarotSection({ onDraw }: { onDraw: () => void }) { return <><PageIntro eyebrow="mirror room / 02" title="tarot">twenty-two archetypal images, redrawn as words. use chance to loosen a fixed perspective, then keep your own judgment.</PageIntro><section className="tarot-landing"><div className="tarot-stack"><div/><div/><button onClick={onDraw}><span>✦</span><Moon/><small>draw one card</small></button></div><div><span className="eyebrow">reflective, never predictive</span><h2>a mirror made of symbols</h2><p>the major arcana hold recurring themes: change, agency, attachment, hope, endings, repair. a card cannot know your future. it can offer a question you might not have chosen yourself.</p><button className="primary-button" onClick={onDraw}>begin a one-card reflection</button></div></section></>; }
+function TarotSection({ onDraw, onThree }: { onDraw: () => void; onThree: () => void }) { return <><PageIntro eyebrow="mirror room / 02" title="tarot">twenty-two archetypal images, redrawn as words. use chance to loosen a fixed perspective, then keep your own judgment.</PageIntro><section className="tarot-landing"><div className="tarot-stack"><div/><div/><button onClick={onDraw}><span>✦</span><Moon/><small>draw one card</small></button></div><div><span className="eyebrow">reflective, never predictive</span><h2>a mirror made of symbols</h2><p>the major arcana hold recurring themes: change, agency, attachment, hope, endings, repair. a card cannot know your future. it can offer a question you might not have chosen yourself.</p><div className="tarot-actions"><button className="primary-button" onClick={onDraw}>begin a one-card reflection</button><button className="text-button framed" onClick={onThree}>try a three-card reflection</button></div></div></section><section className="spread-guide"><span className="eyebrow">three-card spread</span><h2>three small questions</h2>{spreadPrompts.map((item) => <article key={item.label}><strong>{item.label}</strong><p>{item.prompt}</p></article>)}</section></>; }
 
 function ModuleSection({ eyebrow, title, intro, modules }: { eyebrow: string; title: string; intro: string; modules: string[][] }) { return <><PageIntro eyebrow={eyebrow} title={title}>{intro}</PageIntro><div className="module-grid">{modules.map(([name, text], i) => <motion.article whileHover={{ y: -3 }} className="module-card" key={name}><span className="index">{String(i + 1).padStart(2, "0")}</span><div className="module-sigil">{i % 3 === 0 ? "☾" : i % 3 === 1 ? "✦" : "◇"}</div><h2>{name}</h2><p>{text}</p></motion.article>)}</div></>; }
 
@@ -193,6 +219,6 @@ function EditModal({ entry, close, save }: { entry: GrimoireEntry | null; close:
 
 function Cabinet({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) { return <section className="cabinet"><div className="cabinet-heading"><div><span className="eyebrow">open cabinet</span><h2>{title}</h2></div><p>{subtitle}</p></div><div className="cabinet-grid">{children}</div></section>; }
 
-function Onboarding({ open, finish }: { open: boolean; finish: () => void }) { return <Modal open={open} onClose={finish} wide><div className="onboarding"><div className="onboarding-moon"><span/><span/><Moon/></div><span className="eyebrow">welcome to your table</span><h1>ritual</h1><p>build an altar. set an intention. study the sky. pull a card. ground your nervous system. take what resonates, leave what doesn’t.</p><button className="primary-button" onClick={finish}>enter the altar</button><small>created by isa 🐇</small></div></Modal>; }
+function Onboarding({ open, finish }: { open: boolean; finish: () => void }) { return <Modal open={open} onClose={finish} wide><div className="onboarding"><div className="onboarding-moon"><span/><span/><Moon/></div><span className="eyebrow">welcome to your table</span><h1>ritual</h1><p>build an altar. set an intention. study the sky. pull a card. ground your nervous system. take what resonates, leave what doesn’t.</p><button className="primary-button" onClick={finish}>enter the altar</button><small>created by isa 🐰</small></div></Modal>; }
 
 function formatDate(value: string) { return new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" }).format(new Date(value)).toLowerCase(); }

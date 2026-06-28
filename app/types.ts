@@ -37,4 +37,14 @@ export interface MoonData {
   direction: "waxing" | "waning";
   age: number;
   prompt: string;
+  phasePhysics: string;
+  geometry: string;
+  waxingWaning: string;
+  tides: string;
+  eclipses: string;
+  moonlight: string;
+  meaning: string;
+  seasonalName?: string;
+  seasonalNote?: string;
+  seasonalDistanceDays?: number;
 }

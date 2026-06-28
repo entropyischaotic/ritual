@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="ritual app icon">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="18%" r="75%">
+      <stop offset="0" stop-color="#302035"/>
+      <stop offset="0.45" stop-color="#120c17"/>
+      <stop offset="1" stop-color="#050409"/>
+    </radialGradient>
+    <linearGradient id="silver" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#ece5ee"/>
+      <stop offset="0.48" stop-color="#aaa3af"/>
+      <stop offset="1" stop-color="#716a76"/>
+    </linearGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <path d="M96 382h320l-32 58H128z" fill="#1a1015" stroke="#7e657d" stroke-width="6"/>
+  <path d="M128 364h256" stroke="#c99baa" stroke-opacity="0.45" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="256" cy="184" r="92" fill="url(#silver)" filter="url(#glow)"/>
+  <path d="M290 100a92 92 0 1 0 0 168 74 74 0 1 1 0-168z" fill="#16101a" opacity="0.82"/>
+  <path d="M174 314q82-44 164 0" fill="none" stroke="#78627d" stroke-width="5" stroke-linecap="round"/>
+  <path d="M206 326h100l-12 70h-76z" fill="#c9b0ae" stroke="#8d7a83" stroke-width="5"/>
+  <path d="M206 326q24 16 50 0t50 0" fill="none" stroke="#ead8d5" stroke-opacity="0.7" stroke-width="5"/>
+  <path d="M256 258c26 34 22 58 0 75-22-17-26-41 0-75z" fill="#e6ad8b" filter="url(#glow)"/>
+  <path d="M256 286c9 14 8 25 0 34-8-9-9-20 0-34z" fill="#f2d8bb"/>
+  <path d="M352 286q-18-54 3-62 17 6 20 54 10-48 28-42 17 12-7 67 25 17 18 54-7 34-39 36-37-2-43-39-4-33 20-68z" fill="none" stroke="#bdb3c3" stroke-width="8" stroke-linejoin="round"/>
+  <circle cx="236" cy="184" r="7" fill="#6d6570" opacity="0.28"/>
+  <circle cx="276" cy="214" r="9" fill="#6d6570" opacity="0.2"/>
+</svg>
